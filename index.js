@@ -39,13 +39,36 @@ Airplane.prototype.land = function () {
         + It should return a string with `name` and `age`. Example: "Mary, 50"
 */
 
-function Person() {
-  
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+  this.stomach = [];
 }
 
+Person.prototype.eat = function(edible) {
+  if(this.stomach.length < 10){
+    this.stomach.push(edible);
+  }
+}
 
+Person.prototype.poop = function() {
+  this.stomach = [];
+}
 
+Person.prototype.toString = function() {
+  return `${this.name}, ${this.age}`;
+}
 
+const irvin = new Person('Irvin', 27);
+
+irvin.eat('x');
+
+console.log(irvin.toString());
+console.log(irvin.stomach);
+
+irvin.poop();
+
+console.log(irvin.stomach);
 
 
 
@@ -63,9 +86,31 @@ function Person() {
         + The `drive` method should return a string "I ran out of fuel at x miles!" x being `odometer`.
 */
 
-function Car() {
-  
+function Car(model, milesPerGallon) {
+  this.model = model;
+  this.milesPerGallon = milesPerGallon;
+  this.tank = 0;
+  this.odometer = 0;
 }
+
+Car.prototype.fill = function(gallons) {
+  this.tank = this.tank + gallons;
+}
+
+Car.prototype.drive = function(distance) {
+  this.odometer = this.odometer + distance;
+  this.tank = this.tank - (distance / this.milesPerGallon);
+  const fuel = this.tank * this.milesPerGallon;
+  return `I run out of fuel at ${this.odometer + fuel}`;
+}
+
+const kia = new Car('Stinger', 25);
+
+kia.fill(10);
+
+console.log(kia);
+
+console.log(kia.drive(100), kia.odometer, kia.tank);
 
 
 /*
@@ -75,18 +120,37 @@ function Car() {
     - Besides the methods on Person.prototype, babies have the ability to `.play()`:
         + Should return a string "Playing with x", x being the favorite toy.
 */
-function Baby() {
- 
+function Baby(name, age, favoriteToy) {
+ Person.call(this, name, age);
+ this.favoriteToy = favoriteToy;
 }
+
+Baby.prototype = Object.create(Person.prototype);
+
+Baby.prototype.play = function() {
+  return `Playing with ${this.favoriteToy}`;
+}
+
+const elias = new Baby('Elias', 1, 'Teddy Bear');
+
+console.log(elias, elias.play()); 
+
+elias.eat('x');
+
+console.log(elias.stomach);
+
+elias.poop();
+
+console.log(elias.stomach);
 
 
 /* 
   TASK 4
   In your own words explain the four principles for the "this" keyword below:
-  1. 
-  2. 
-  3. 
-  4. 
+  1. This in function binding will refer to a defined variable in the global scope outside the function and must be properly defined if using strict mode.
+  2. This in implicit binding implies that this is referring to whatever is on the left of the dot.
+  3. This in explicit binding is explicitly bound to a variable through the use of call, apply, or bind.
+  4. This in new binding is used to create new objects using a constructor function.
 */
 
 
